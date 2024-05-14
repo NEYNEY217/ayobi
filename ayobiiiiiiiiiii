@@ -1,0 +1,75 @@
+#bedel products kima bghiti (str)
+product_names = [
+    "Notebook", "Pen", "Pencil", "Eraser", "Highlighter", 
+    "Binder", "Backpack", "Calculator", "Ruler", "Stapler"
+]
+#list dyal quantite int
+product_quantities = [
+    100, 200, 150, 300, 75, 
+    50, 30, 40, 100, 25
+]
+#list dyal taman str 
+product_prices = [
+    2.50, 0.50, 0.25, 0.10, 1.25, 
+    3.00, 20.00, 15.00, 1.00, 5.00
+]
+initial_quantities = product_quantities.copy()  
+
+#chwiya d 3ya9a f affichage d produits bla ma tbdl fiha haja
+def display_inventory():
+    print("Campus Store Inventory:")
+    print(f"{'Product':<15} {'Quantity':<10} {'Price':<10}")
+    for i in range(len(product_names)):
+        print(f"{i}- {product_names[i]:<15} {product_quantities[i]:<10} ${product_prices[i]:<10.2f}")
+
+#lists li fihom taman w chhal d produist aytchraw bach yt7sbo f lekher
+purchased_products = []
+purchased_quantities = []
+purchased_costs = []
+
+def select_product():
+    while True:
+        display_inventory()
+        product_index = int(input("Enter the number of the product you want to buy (0-9): "))
+        if 0 <= product_index < len(product_names):
+            quantity = int(input(f"Enter the quantity of {product_names[product_index]} you want to buy: "))
+            if quantity <= product_quantities[product_index]:
+                product_quantities[product_index] -= quantity
+                purchased_products.append(product_names[product_index])
+                purchased_quantities.append(quantity)
+                total_cost = quantity * product_prices[product_index]
+                purchased_costs.append(total_cost)
+                print(f"Added {quantity} {product_names[product_index]}(s) to your cart. Total cost: ${total_cost:.2f}")
+            else:
+                print(f"Sorry, we only have {product_quantities[product_index]} {product_names[product_index]}(s) available.")
+        else:
+            print("Invalid product number. Please try again.")
+
+        more = input("Do you want to buy another product? (yes/no): ").strip().lower()
+        if more != 'yes':
+            break
+
+def confirm_purchase():
+    print("You have selected the following products:")
+    grand_total = 0
+    for i in range(len(purchased_products)):
+        print(f"{purchased_products[i]:<15} Quantity: {purchased_quantities[i]:<5} Total Cost: ${purchased_costs[i]:.2f}")
+        grand_total += purchased_costs[i]
+    print(f"\nGrand Total: ${grand_total:.2f}")
+
+    confirm = input("Do you want to confirm the purchase? (yes/no): ").strip().lower()
+    if confirm == 'yes':
+        print("Purchase confirmed! Thank you for shopping with us.")
+    else:
+        print("Purchase cancelled. Resetting quantities...")
+        reset_quantities()
+
+def reset_quantities():
+    global product_quantities
+    product_quantities = initial_quantities.copy()
+
+def main():
+    select_product()
+    confirm_purchase()
+
+main()
